@@ -14,6 +14,10 @@ from django.shortcuts import get_object_or_404
 from .models import Application
 from .models import Job
 from .serializers import ApplicationSerializer
+from rest_framework.exceptions import ValidationError
+from rest_framework.pagination import PageNumberPagination
+
+
 
 
 # Create your views here.
@@ -25,6 +29,7 @@ class RegisterView(generics.CreateAPIView):
 class JobListCreateView(generics.ListCreateAPIView):
     queryset = Job.objects.all().order_by('-created_at')
     serializer_class = JobSerializer
+    pagination_class = PageNumberPagination
 
     def get_permissions(self):
         if self.request.method == 'POST':
@@ -64,9 +69,8 @@ class ApplyToJobView(APIView):
 class ListApplicationsView(generics.ListAPIView):
     serializer_class = ApplicationSerializer
     permission_classes = [IsAuthenticated]
+    pagination_class = PageNumberPagination
 
 
     def get_queryset(self):
         return Application.objects.filter(applicant=self.request.user).order_by('-created_at')
-
-
