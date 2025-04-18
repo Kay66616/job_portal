@@ -18,8 +18,9 @@ from .serializers import ApplicationSerializer
 
 # Create your views here.
 class RegisterView(generics.CreateAPIView):
-    queryset = User.objects.all()
-    serializer_class = RegisterSerializer
+    queryset = User.objects.all().order_by('-created_at')
+    serializer_class = JobSerializer
+   
 
 class JobListCreateView(generics.ListCreateAPIView):
     queryset = Job.objects.all().order_by('-created_at')
@@ -64,5 +65,8 @@ class ListApplicationsView(generics.ListAPIView):
     serializer_class = ApplicationSerializer
     permission_classes = [IsAuthenticated]
 
+
     def get_queryset(self):
         return Application.objects.filter(applicant=self.request.user).order_by('-created_at')
+
+
