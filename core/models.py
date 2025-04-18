@@ -1,6 +1,7 @@
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.db import models
 from django.utils import timezone
+from django.conf import settings
 
 
 # Create your models here.
@@ -25,6 +26,8 @@ class User(AbstractBaseUser, PermissionsMixin):
         ('job_seeker', 'Job Seeker'),
         ('employer', 'Employer'),
     )
+    
+
 
     email = models.EmailField(unique=True)
     full_name = models.CharField(max_length=255)
@@ -40,3 +43,14 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.email
+class Job(models.Model):
+    employer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='jobs')
+    title = models.CharField(max_length=255)
+    description = models.TextField()
+    location = models.CharField(max_length=255)
+    salary = models.DecimalField(max_digits=10, decimal_places=2)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title
+
