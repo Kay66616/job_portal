@@ -53,4 +53,15 @@ class Job(models.Model):
 
     def __str__(self):
         return self.title
+class Application(models.Model):
+    job = models.ForeignKey(Job, on_delete=models.CASCADE, related_name='applications')
+    applicant = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='applications')
+    cover_letter = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('job', 'applicant')  # Prevent duplicate applications
+
+    def __str__(self):
+        return f"{self.applicant.full_name} - {self.job.title}"
 
