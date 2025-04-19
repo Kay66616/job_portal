@@ -23,7 +23,7 @@ from rest_framework.pagination import PageNumberPagination
 # Create your views here.
 class RegisterView(generics.CreateAPIView):
     queryset = User.objects.all().order_by('-created_at')
-    serializer_class = JobSerializer
+    serializer_class = RegisterSerializer
    
 
 class JobListCreateView(generics.ListCreateAPIView):
